@@ -4,8 +4,8 @@
 
 The steps required to clone the repo and run a local development server are as follows:
 ```
-git clone https://github.com/playcanvas/super-splat.git
-cd super-splat
+git clone [https://github.com/playcanvas/super-splat.git](https://github.com/tingzhongyue/DragGS-UI.git)](https://github.com/tingzhongyue/DragGS-UI.git)
+cd draggs
 npm i
 npm run develop
 ```
