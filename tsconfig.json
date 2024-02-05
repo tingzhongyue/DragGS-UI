@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "target": "es2017",
+        "lib": ["es2019", "dom", "WebWorker"],
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "inlineSources": true,
+        "module": "es6",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "baseUrl": ".",
+        "paths": {
+            "playcanvas": ["node_modules/playcanvas/build/playcanvas.mjs"],
+            "playcanvas-extras": ["node_modules/playcanvas/build/playcanvas-extras.mjs"],
+            "pcui": ["node_modules/@playcanvas/pcui"]
+        }
+    },
+    "include": ["./src/**/*.ts"],
+    "exclude": ["node_modules", "**/*.js", "dist"]
+}
