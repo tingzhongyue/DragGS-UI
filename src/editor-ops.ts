@@ -452,6 +452,32 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
                 const my = Math.floor(vec4.y * mask.height);
                 return mask.data[(my * mask.width + mx) * 4] === 255;
             });
+
+            var idx = [];
+            for(var i = 0 ; i<= selection.length; i ++)
+                if (selection[i] ===1 )
+                    idx.push(i);
+            var data  = {
+                'idx': idx
+            };
+            const jsonString = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(blob);
+
+            // 设置下载文件的名称
+            downloadLink.download = "brush.json";
+
+            // 将链接添加到文档中
+            document.body.appendChild(downloadLink);
+
+            // 模拟点击链接以触发下载
+            downloadLink.click();
+
+            // 移除链接
+            document.body.removeChild(downloadLink);
+            
+
         });
         updateSelection();
     });
@@ -486,10 +512,31 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
                 const my = Math.floor(vec4.y * mask.height);
                 return mask.data[(my * mask.width + mx) * 4] === 255;
             });
-
+            var idx = [];
             for(var i = 0 ; i<= selection.length; i ++)
                 if (selection[i] ===1 )
-                    console.log(i);
+                    idx.push(i);
+            var data  = {
+                'viewProjMat': camera.camera._viewProjMat,
+                'worldTransform': splatDef.element.worldTransform,
+                'idx': idx
+            };
+            const jsonString = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(blob);
+
+            // 设置下载文件的名称
+            downloadLink.download = "startpoint.json";
+
+            // 将链接添加到文档中
+            document.body.appendChild(downloadLink);
+
+            // 模拟点击链接以触发下载
+            downloadLink.click();
+
+            // 移除链接
+            document.body.removeChild(downloadLink);
         });
         
         updateSelection();
