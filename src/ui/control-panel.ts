@@ -137,7 +137,7 @@ class ControlPanel extends Panel {
 
         const selectBySphereLabel = new Label({
             class: 'control-label',
-            text: 'Sphere'
+            text: 'EndPoint'
         });
 
         const selectBySphereCenter = new VectorInput({
@@ -240,16 +240,16 @@ class ControlPanel extends Panel {
             enabled: true
         });
 
-        const endpointButton = new Button({
-            class: 'control-element-expand',
-            text: 'End Point',
-            enabled: true
-        });
+        // const endpointButton = new Button({
+        //     class: 'control-element-expand',
+        //     text: 'End Point',
+        //     enabled: true
+        // });
 
         selectTools.append(rectSelectButton);
         selectTools.append(brushSelectButton);
         selectTools.append(startpointButton);
-        selectTools.append(endpointButton);
+        // selectTools.append(endpointButton);
 
         // selection button parent
         const selectGlobal = new Container({
@@ -274,9 +274,27 @@ class ControlPanel extends Panel {
             text: 'Invert'
         });
 
+        const downloadStartPointButton = new Button({
+            class: 'control-element-expand',
+            text: 'download StartPoint'
+        });
+
+        const downloadBrushPointButton = new Button({
+            class: 'control-element-expand',
+            text: 'download BrushPoint'
+        });
+
+        const downloadEndPointButton = new Button({
+            class: 'control-element-expand',
+            text: 'download EndPoint'
+        });
+
         selectGlobal.append(selectAllButton);
         selectGlobal.append(selectNoneButton);
         selectGlobal.append(invertSelectionButton);
+        selectGlobal.append(downloadStartPointButton);
+        selectGlobal.append(downloadBrushPointButton);
+        selectGlobal.append(downloadEndPointButton);
 
         selectionPanel.append(selectBySize);
         selectionPanel.append(selectByOpacity);
@@ -411,15 +429,15 @@ class ControlPanel extends Panel {
             events.fire('tool:activate', 'StartPointSelection');
         });
 
-        endpointButton.on('click', () => {
-            events.fire('tool:activate', 'EndPointSelection');
-        });
+        // endpointButton.on('click', () => {
+        //     events.fire('tool:activate', 'EndPointSelection');
+        // });
 
         events.on('tool:activated', (toolName: string) => {
             rectSelectButton.class[toolName === 'RectSelection' ? 'add' : 'remove']('active');
             brushSelectButton.class[toolName === 'BrushSelection' ? 'add' : 'remove']('active');
             startpointButton.class[toolName === 'StartPointSelection' ? 'add': 'remove']('active');
-            endpointButton.class[toolName === 'EndPointSelection' ? 'add': 'remove']('active');
+            // endpointButton.class[toolName === 'EndPointSelection' ? 'add': 'remove']('active');
         });
 
         // radio logic
@@ -509,6 +527,20 @@ class ControlPanel extends Panel {
         invertSelectionButton.on('click', () => {
             events.fire('invertSelection');
         });
+
+        downloadStartPointButton.on('click', () => {
+            events.fire('downloadStartPointButton');
+        });
+
+        downloadEndPointButton.on('click', () => {
+            events.fire('downloadEndPointButton', selectBySphereCenter.value);
+        });
+
+        downloadBrushPointButton.on('click', () => {
+            events.fire('downloadBrushPointButton');
+        });
+
+
 
         selectBySphereCenter.on('change', () => {
             events.fire('selectBySpherePlacement', selectBySphereCenter.value);

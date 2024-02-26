@@ -279,6 +279,9 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
         updateSelection();
     });
 
+
+
+
     events.on('selectBySize', (op: string, value: number) => {
         splatDefs.forEach((splatDef) => {
             const splatData = splatDef.data;
@@ -361,6 +364,24 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
         });
         updateSelection();
     });
+
+    events.on('downloadEndPointButton', (sphere: number[]) => {
+
+        vec.set(sphere[0], sphere[1], sphere[2]);
+        var data  = {
+            'EndPoint': vec
+        };
+        const jsonString = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const downloadLink = document.createElement("a");
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = "endpoint.json";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+
+        document.body.removeChild(downloadLink);
+    });
+
 
     events.on('selectByPlane', (op: string, axis: number[], distance: number) => {
         splatDefs.forEach((splatDef) => {
@@ -453,6 +474,23 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
                 return mask.data[(my * mask.width + mx) * 4] === 255;
             });
 
+        
+        });
+        updateSelection();
+    });
+
+    events.on('downloadBrushPointButton', () => {
+        splatDefs.forEach((splatDef) => {
+            const splatData = splatDef.data;
+            const selection = splatData.getProp('selection') as Float32Array;
+            const opacity = splatData.getProp('opacity') as Float32Array;
+
+            // convert screen rect to camera space
+            const camera = scene.camera.entity.camera;
+
+            // calculate final matrix
+            mat.mul2(camera.camera._viewProjMat, splatDef.element.worldTransform);
+
             var idx = [];
             for(var i = 0 ; i<= selection.length; i ++)
                 if (selection[i] ===1 )
@@ -476,11 +514,10 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
 
             // 移除链接
             document.body.removeChild(downloadLink);
-            
 
         });
-        updateSelection();
     });
+    
 
     events.on('selectByMouse', (op: string, mask: ImageData) => {
         splatDefs.forEach((splatDef) => {
@@ -512,6 +549,23 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
                 const my = Math.floor(vec4.y * mask.height);
                 return mask.data[(my * mask.width + mx) * 4] === 255;
             });
+        });
+        
+        updateSelection();
+    });
+
+    events.on('downloadStartPointButton', () => {
+        splatDefs.forEach((splatDef) => {
+            const splatData = splatDef.data;
+            const selection = splatData.getProp('selection') as Float32Array;
+            const opacity = splatData.getProp('opacity') as Float32Array;
+
+            // convert screen rect to camera space
+            const camera = scene.camera.entity.camera;
+
+            // calculate final matrix
+            mat.mul2(camera.camera._viewProjMat, splatDef.element.worldTransform);
+
             var idx = [];
             for(var i = 0 ; i<= selection.length; i ++)
                 if (selection[i] ===1 )
@@ -537,10 +591,13 @@ const registerEvents = (events: Events, editHistory: EditHistory, scene: Scene, 
 
             // 移除链接
             document.body.removeChild(downloadLink);
+
         });
-        
-        updateSelection();
     });
+
+    
+
+
 
     events.on('deleteSelection', () => {
         splatDefs.forEach((splatDef) => {
